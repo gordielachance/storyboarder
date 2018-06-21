@@ -372,6 +372,21 @@ let toggleNewShot = () => {
   storeUndoStateForScene()
 }
 
+let toggleExternalFile = () => {
+  //board linked file
+  boardLink = boardData.boards[currentBoard].link
+  boardLinkWrapper = document.querySelector('#board-metadata #board-file-link')
+  boardLinkWrapperText = boardLinkWrapper.querySelector('#board-file-name')
+  
+  if (boardLink){
+      boardLinkWrapperText.innerHTML = boardLink
+      boardLinkWrapper.style.visibility = 'visible';
+  }else{
+      boardLinkWrapperText.innerHTML = '-'
+      boardLinkWrapper.style.visibility = 'hidden';
+  }
+}
+
 const commentOnLineMileage = (miles) => {
   let message = []
   let otherMessages
@@ -983,7 +998,7 @@ const loadBoardUI = async () => {
       }
     }
   }
-  document.querySelector('#show-in-finder-button').addEventListener('pointerdown', event => {
+  document.querySelector('#board-file-link').addEventListener('pointerdown', event => {
     let filepath = getActiveLayerFilePath()
     if (filepath) {
       console.log('revealing', filepath)
@@ -3318,6 +3333,8 @@ let renderMarkerPosition = () => {
 let renderMetaData = () => {
   document.querySelector('#board-metadata #shot').innerHTML = 'Shot: ' + boardData.boards[currentBoard].shot
   document.querySelector('#board-metadata #board-numbers').innerHTML = 'Board: ' + boardData.boards[currentBoard].number + ' of ' + boardData.boards.length
+  
+
 
   // reset values
   let editableInputs = document.querySelectorAll('#board-metadata input:not(.layers-ui-reference-opacity), textarea')
@@ -3329,6 +3346,9 @@ let renderMetaData = () => {
   if (boardData.boards[currentBoard].newShot) {
     document.querySelector('input[name="newShot"]').checked = true
   }
+    
+  toggleExternalFile()
+    
 
   if (boardData.boards[currentBoard].duration) {
     if (selections.size == 1) {
